@@ -1,36 +1,38 @@
 package com.witbooking.bidserver.filters;
 
-import org.slf4j.Logger;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.context.annotation.Bean;
+import com.witbooking.bidserver.entities.User;
+import com.witbooking.bidserver.respositories.IUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.*;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.Instant;
 
+@Component
+@Order(1)
+public class SessionKeyFilter extends OncePerRequestFilter {
 
-public class SessionKeyFilter implements  Filter{
+    @Autowired
+    private IUserRepository userRepository;
 
-    @Bean
-    public FilterRegistrationBean<SessionKeyFilter> sessionKeyFilter(){
-        FilterRegistrationBean<SessionKeyFilter> registrationBean
-                = new FilterRegistrationBean<>();
-
-        registrationBean.setFilter(new SessionKeyFilter());
-        registrationBean.addUrlPatterns("/bids/*");
-        return registrationBean;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        User user = userRepository.findBySessionKeyAndExpiredTimeSessionKeyLessThan(request.getParameter("sessionKey"), Instant.now());
+        if (user != null) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendError(HttpStatus.UNAUTHORIZED.value(), "Expired session token");
+        }
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("=========== DO FILTER ============");
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-            HttpServletResponse response = (HttpServletResponse) servletResponse;
-        for (int i =0; i <= request.getParameterMap().size(); i++){
-                System.out.println("Parametro ========>" + request.getParameterMap().get(i));
-        }
-            filterChain.doFilter(request, response);
-
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return request.getServletPath().startsWith("/users");
     }
 }
