@@ -6,6 +6,7 @@ import com.witbooking.bidserver.entities.BidByItem;
 import com.witbooking.bidserver.entities.BidForItem;
 import com.witbooking.bidserver.servervices.IBidForItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -20,7 +21,7 @@ public class BidForItemController {
     private IBidForItemService bidForItemService;
 
     @PostMapping("/{itemId}/bid")
-    public void saveBidForItem(@PathParam("sessionKey") String sessionKey, @PathVariable int itemId, @RequestBody BidForItemDTO body) {
+    public void saveBidForItem(@PathParam("sessionKey") String sessionKey, @PathVariable int itemId, @RequestBody @Validated BidForItemDTO body) {
         BidForItem bidForItem = new BidForItem();
         bidForItem.setItemId(itemId);
         bidForItem.setBid(body.getBid());
