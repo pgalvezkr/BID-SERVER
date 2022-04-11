@@ -1,33 +1,18 @@
 package com.witbooking.bidserver.dtos;
 
+import com.witbooking.bidserver.entities.User;
+
 import java.sql.Timestamp;
+import java.util.List;
 
 public class UserResponseDTO {
-    private String sessionKey;
-    private Timestamp expiredTimeSessionKey;
-    private boolean activeSession;
+    private List<User> users;
 
-    public String getSessionKey() {
-        return sessionKey;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setSessionKey(String sessionKey) {
-        this.sessionKey = sessionKey;
-    }
-
-    public Timestamp getExpiredTimeSessionKey() {
-        return expiredTimeSessionKey;
-    }
-
-    public void setExpiredTimeSessionKey(Timestamp expiredTimeSessionKey) {
-        this.expiredTimeSessionKey = expiredTimeSessionKey;
-    }
-
-    public boolean isActiveSession() {
-        return activeSession;
-    }
-
-    public void setActiveSession(boolean activeSession) {
-        this.activeSession = activeSession;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 }
