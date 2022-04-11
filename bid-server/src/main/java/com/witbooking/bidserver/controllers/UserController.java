@@ -3,11 +3,8 @@ package com.witbooking.bidserver.controllers;
 import com.witbooking.bidserver.dtos.UserResponseDTO;
 import com.witbooking.bidserver.servervices.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.util.List;
 
 @RestController
 @RequestMapping("/user")
