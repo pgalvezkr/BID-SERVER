@@ -33,6 +33,6 @@ public class SessionKeyFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().startsWith("/users");
+        return request.getServletPath().startsWith("/user");
     }
 }
