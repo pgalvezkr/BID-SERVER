@@ -28,6 +28,8 @@ public class SessionKeyFilter extends OncePerRequestFilter {
         if (user != null) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             response.sendError(HttpStatus.UNAUTHORIZED.value(), "Expired session token");
+        }else{
+            filterChain.doFilter(request, response);
         }
     }
 
